@@ -1,3 +1,26 @@
+<?php
+ob_start();
+
+ session_start();
+include_once('conf.php');
+if (strlen($_SESSION['id']==0)) {
+  header('location:logout.php');
+  ob_end_flush();
+  } else{
+
+  
+    $userid=$_SESSION['id'];
+    $query=mysqli_query($con,"select * from users where id='$userid'");
+    while($result=mysqli_fetch_array($query))
+    {
+       $_SESSION['surname']= $result['surname'];
+       $_SESSION['email']= $result['email'];
+
+        
+    } 
+           
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -22,7 +45,7 @@
       <nav>
         <img src="./images/logo.jpg" alt="image" />
         <div class="login">
-          <a href="./sign-in.html" class="sign">Log Out</a>
+          <a href="logout.php" class="sign">Log Out</a>
         </div>
       </nav>
       <div class="chatHolder">
@@ -46,3 +69,6 @@
     <script src="./js/app.js"></script>
   </body>
 </html>
+
+
+<?php  }  ?>

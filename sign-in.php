@@ -1,3 +1,35 @@
+<?php
+ob_start();
+ session_start(); 
+include_once('conf.php');
+// Code for login 
+if(isset($_POST['login']))
+{
+$password=$_POST['password'];
+
+$dec_password=md5($password);
+
+
+$useremail=$_POST['uemail'];
+$ret= mysqli_query($con,"SELECT id,surname FROM users WHERE email='$useremail' and password='$dec_password'");
+$num=mysqli_fetch_array($ret);
+if($num>0)
+{
+
+$_SESSION['id']=$num['id'];
+$_SESSION['surname']=$num['surname'];
+header("location:index.php");
+ob_end_flush();
+}
+else
+{
+echo "<script>alert('Invalid username or password');</script>";
+}
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,18 +62,18 @@
         <section class="heroLogin">
             <img src="./images/logo.jpg" alt="fichub" >
             <h1>Welcome !</h1>
-            <form>
+            <form method="post">
                 <label>
                     <i class="fa-solid fa-at"></i>
-                    <input type="email" placeholder="Email">
+                    <input type="email" placeholder="Email" name="uemail">
                 </label>
                 <label>
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" placeholder="Password">
+                    <input type="password" placeholder="Password" name="password">
                 </label>
                 <label class="btns">
-                    <a href="./sign-up.html">Create Account</a>
-                    <input type="submit" value="Sign-In">
+                    <a href="./sign-up.php">Create Account</a>
+                    <input type="submit" name="login" value="Sign-In">
                 </label>
             </form>
         </section>

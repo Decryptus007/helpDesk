@@ -1,3 +1,44 @@
+<?php 
+
+session_start();
+include_once('conf.php');
+
+//Code for Registration 
+if(isset($_POST['submit']))
+{
+    $fname= $_POST['surname'];
+    $lname= $_POST['firstname'];
+    $email= $_POST['email'];
+    $password=  md5($_POST['password']);
+
+    $fname = mysqli_real_escape_string($con, $fname);
+    $lname = mysqli_real_escape_string($con, $lname);
+    $email = mysqli_real_escape_string($con, $email);
+    $password = mysqli_real_escape_string($con, $password);
+
+ 
+
+
+
+$sql=mysqli_query($con,"select id from users where email='$email'");
+$row=mysqli_num_rows($sql);
+
+    if($row>0){
+    echo "<script>alert('Email id already exist with another account. Please try with other email id');</script>";
+        } else{
+            $msg=mysqli_query($con,"insert into users(surname,firstname,email,password) values('$fname','$lname','$email','$password')");
+
+        if($msg)
+        {
+            echo "<script>alert('Registered successfully');</script>";
+            echo "<script type='text/javascript'> document.location = 'index.php'; </script>";
+        }
+    }
+}
+
+ 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,30 +71,30 @@
         <section class="heroLogin">
             <img src="./images/logo.jpg" alt="fichub">
             <h1>Sign Up</h1>
-            <form>
+            <form method="post">
                 <label>
                     <i class="fa-solid fa-person"></i>
-                    <input type="text" placeholder="Surname">
+                    <input type="text" placeholder="Surname" name="surname">
                 </label>
                 <label>
                     <i class="fa-solid fa-person"></i>
-                    <input type="text" placeholder="First Name">
+                    <input type="text" placeholder="First Name" name="firstname">
                 </label>
                 <label>
                     <i class="fa-solid fa-at"></i>
-                    <input type="email" placeholder="Email">
+                    <input type="email" placeholder="Email" name="email">
                 </label>
                 <label>
                     <i class="fa-solid fa-lock"></i>
-                    <input id="pwd" type="password" placeholder="Password">
+                    <input id="pwd" type="password" placeholder="Password" name="password">
                 </label>
                 <label>
                     <i class="fa-solid fa-lock"></i>
                     <input id="cpwd" type="password" placeholder="Confirm Password">
                 </label>
                 <label class="btns">
-                    <a href="./sign-in.html">Log In</a>
-                    <input id="signBtn" type="submit" value="Sign-Up">
+                    <a href="./sign-in.php">Log In</a>
+                    <input id="signBtn" type="submit" name="submit" value="Sign-Up">
                 </label>
             </form>
         </section>
